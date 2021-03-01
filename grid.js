@@ -21,19 +21,21 @@ const sketch = () => {
   };
 
   const points = createGrid();
+  const margin = 400;
 
   return ({ context, width, height }) => {
     context.fillStyle = "white";
     context.fillRect(0, 0, width, height);
 
     points.forEach(([u, v]) => {
-      const x = u * width; // scale pixel size
-      const y = v * height;
+      // allow margin at edges
+      const x = lerp(margin, width - margin, u); // scale pixel size
+      const y = lerp(margin, height - margin, v);
 
       context.beginPath();
       context.arc(x, y, 100, 0, Math.PI * 2, false);
       context.strokeStyle = "black";
-      context.lineWidth = 30;
+      context.lineWidth = 40;
       context.stroke();
     });
   };
