@@ -9,11 +9,21 @@ require("three/examples/js/controls/OrbitControls");
 
 const canvasSketch = require("canvas-sketch");
 
+random.setSeed(359061);
+
 const settings = {
+  // need to set specific size for gif
+  dimensions: [512, 512],
+  // set frames per second
+  fps: 24,
+  // timing, in seconds
+  duration: 4,
   // Make the loop animated
   animate: true,
   // Get a WebGL canvas rather than 2D
   context: "webgl",
+  // smooth jagged edge
+  attributes: { antialias: true },
 };
 
 const sketch = ({ context }) => {
@@ -34,8 +44,7 @@ const sketch = ({ context }) => {
   // Setup a geometry (note: setting this up OUTSIDE the loop is best for performance)
   const box = new THREE.BoxGeometry(1, 1, 1);
 
-  // use random colors
-  const palette = random.pick(palettes);
+  const palette = ["#a70267", "#f10c49", "#fb6b41", "#f6d86b", "#339194"];
 
   // Setup a mesh with geometry + material
   for (let i = 0; i < 30; i += 1) {
@@ -106,7 +115,11 @@ const sketch = ({ context }) => {
       camera.updateProjectionMatrix();
     },
     // Update & render your scene here
-    render({ time }) {
+    // playhead is only really useful when there's a duration on your loop
+    render({ playhead }) {
+      // scene.rotation.y = playhead;
+      // scene.rotation.x = playhead;
+      scene.rotation.z = playhead * Math.PI * 2;
       renderer.render(scene, camera);
     },
     // Dispose of events & renderer for cleaner hot-reloading
